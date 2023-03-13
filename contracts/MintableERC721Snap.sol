@@ -47,9 +47,8 @@ contract MintableERC721Snap is ERC721, Ownable, ReentrancyGuard {
   /// @notice ID counter for ERC721 tokens
   uint256 private idCounter;
 
-
   constructor(
-    string memory _name_, 
+    string memory _name_,
     string memory _symbol_,
     ContractURI memory _contractURI_,
     string memory _tokenImageURL_,
@@ -140,7 +139,7 @@ contract MintableERC721Snap is ERC721, Ownable, ReentrancyGuard {
   function tokenURI(uint256 _tokenId) public view virtual override returns (string memory) {
     if (block.timestamp < VISIBLE_ENDS) {
       return _constructTokenURI(_tokenId);
-    }else{
+    } else {
       return _constructSNAPURI(_tokenId);
     }
   }
@@ -154,7 +153,6 @@ contract MintableERC721Snap is ERC721, Ownable, ReentrancyGuard {
    * @param _to address - Address to mint to`
    */
   function mint(address _to) external payable nonReentrant returns (uint256) {
-
     require(block.timestamp < MINT_ENDS, "NFTSnap:minting-ended");
     require(msg.value >= (salePrice + MINT_FEE), "NFTSnap:insufficient-amount");
 
@@ -191,7 +189,6 @@ contract MintableERC721Snap is ERC721, Ownable, ReentrancyGuard {
     (bool _success, ) = CREATOR_ADDRESS.call{ value: funds_ }("");
     require(_success, "NFTSnap:funds-release-failed");
   }
-
 
   /* ===================================================================================== */
   /* Internal Functions                                                                    */
