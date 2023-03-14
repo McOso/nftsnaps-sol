@@ -141,11 +141,11 @@ contract MintableERC721Snap is ERC721, Ownable, ReentrancyGuard {
   }
 
   /**
-   * @notice Burns a token
+   * @notice Permissionless token burn after visibility ends
    * @param _tokenId uint256 - Token ID to burn
    */
   function burn(uint256 _tokenId) external {
-    require(_isApprovedOrOwner(_msgSender(), _tokenId), "NFTSnap:unauthorized-burn");
+    require(!_isVisible(), "NFTSnap:unauthorized-burn");
     _burn(_tokenId);
     --idCounter;
   }
