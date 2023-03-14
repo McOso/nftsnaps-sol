@@ -84,7 +84,7 @@ contract MintableERC721Snap is ERC721, Ownable, ReentrancyGuard {
   /* External Functions                                                                    */
   /* ===================================================================================== */
 
-  function constructContractURI() external view virtual returns (string memory uri) {
+  function contractURI() external view virtual returns (string memory uri) {
     if (_isVisible()) {
       return _constructContractMeta();
     } else {
