@@ -5,6 +5,8 @@ export default async function deploy(hardhat: HardhatRuntimeEnvironment) {
 
   const { deploy } = deployments;
   const { deployer } = await getNamedAccounts();
+
+  
   await deploy("TurboERC721", {
     contract: "MintableERC721",
     from: deployer,

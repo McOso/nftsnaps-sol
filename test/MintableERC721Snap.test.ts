@@ -43,20 +43,35 @@ describe('MintableERC721Snap', () => {
     );
   });
 
+  describe('constructor', () => {
+    it('should set correct owner', async () => {
+      expect(await MintableERC721Snap.owner()).to.be.equal(wallet1.address);
+    });
+    it('should set correct sale price', async () => {
+      expect(await MintableERC721Snap.getSalePrice()).to.be.equal(0);
+    });
+    it('should set correct mint fee', async () => {
+      expect(await MintableERC721Snap.getMintFee()).to.be.equal(MINT_FEE);
+    });
+  });
+
   describe('mint(address to)', () => {
     it('should SUCCEED to mint NFT #1', async () => {
       await MintableERC721Snap.mint(wallet0.address, { value: MINT_FEE });
       expect(await MintableERC721Snap.ownerOf(1)).to.be.equal(wallet0.address);
+      expect(await MintableERC721Snap.totalSupply()).to.equal(1);
     });
     it('should FAIL to mint NFT #1 - no funds', async () => {
       await expect(MintableERC721Snap.mint(wallet0.address)).to.be.revertedWith(
         'NFTSnap:insufficient-amount',
       );
+      expect(await MintableERC721Snap.totalSupply()).to.equal(0);
     });
     it('should FAIL to mint NFT #1 - not enough funds', async () => {
       await expect(
         MintableERC721Snap.mint(wallet0.address, { value: toWei('0.0000091') }),
       ).to.be.revertedWith('NFTSnap:insufficient-amount');
+      expect(await MintableERC721Snap.totalSupply()).to.equal(0);
     });
   });
 });

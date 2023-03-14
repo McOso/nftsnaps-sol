@@ -80,4 +80,12 @@ contract SnapFactory is ISnapFactory {
       snaps[j] = tempSnaps_[j];
     }
   }
+
+  function isActive(address _snap) external view returns (bool active) {
+    return snapsMap[_snap] && MintableERC721Snap(_snap).isMintActive();
+  }
+
+  function isVisible(address _snap) external view returns (bool visible) {
+    return snapsMap[_snap] && MintableERC721Snap(_snap).isVisible();
+  }
 }

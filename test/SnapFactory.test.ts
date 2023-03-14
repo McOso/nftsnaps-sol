@@ -66,7 +66,10 @@ describe('SnapFactory', () => {
       expect(result.hash).to.not.be.undefined;
       expect(result.confirmations).to.be.greaterThan(0);
       await expect(result).to.emit(SnapFactoryContract, 'SnapMade');
-      expect((await SnapFactoryContract.getActiveSnaps()).length).to.equal(1);
+      const snaps = await SnapFactoryContract.getActiveSnaps();
+      expect(snaps.length).to.equal(1);
+      expect(await SnapFactoryContract.isActive(snaps[0])).to.be.true;
+      expect(await SnapFactoryContract.isVisible(snaps[0])).to.be.true;
     });
 
     it('should SUCCEED to create a snap with creator fee', async () => {
@@ -84,7 +87,26 @@ describe('SnapFactory', () => {
       expect(result.hash).to.not.be.undefined;
       expect(result.confirmations).to.be.greaterThan(0);
       await expect(result).to.emit(SnapFactoryContract, 'SnapMade');
-      expect((await SnapFactoryContract.getActiveSnaps()).length).to.equal(1);
+      const snaps = await SnapFactoryContract.getActiveSnaps();
+      expect(snaps.length).to.equal(1);
+      expect(await SnapFactoryContract.isActive(snaps[0])).to.be.true;
+      expect(await SnapFactoryContract.isVisible(snaps[0])).to.be.true;
+    });
+
+    it('should FAIL to create a snap with 0 mint fee', async () => {
+      await expect(SnapFactoryContract.createSnap(
+        'Test Snap',
+        'NFTSNAP',
+        contractInformation,
+        'ipfs://QmXxZWr5AQf25yu1UswNm2cfGbaUbR5U3ejH1WfFEP8f1e',
+        'ipfs://QmRZ86jmHScFm94hoED2FmB6SjqpuACgy6VYN5nTibxwSB',
+        toWei('0.00000001'),
+        wallet0.address,
+        wallet1.address,
+        0,
+      )).to.be.revertedWith(
+        'SnapFactory:Mint-fee-too-low',
+      );
     });
   });
 });
