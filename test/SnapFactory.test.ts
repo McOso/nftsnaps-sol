@@ -57,7 +57,7 @@ describe('SnapFactory', () => {
         'NFTSNAP',
         contractInformation,
         'ipfs://QmXxZWr5AQf25yu1UswNm2cfGbaUbR5U3ejH1WfFEP8f1e',
-        'ipfs://QmRZ86jmHScFm94hoED2FmB6SjqpuACgy6VYN5nTibxwSB',
+        'ipfs://QmTkCP5u95yQRr9kM513QNr5pT6DYe3sD3yn8qRi2osTPg',
         MINT_FEE,
         wallet0.address,
         wallet1.address,
@@ -78,7 +78,7 @@ describe('SnapFactory', () => {
         'NFTSNAP',
         contractInformation,
         'ipfs://QmXxZWr5AQf25yu1UswNm2cfGbaUbR5U3ejH1WfFEP8f1e',
-        'ipfs://QmRZ86jmHScFm94hoED2FmB6SjqpuACgy6VYN5nTibxwSB',
+        'ipfs://QmTkCP5u95yQRr9kM513QNr5pT6DYe3sD3yn8qRi2osTPg',
         MINT_FEE,
         wallet0.address,
         wallet1.address,
@@ -94,19 +94,19 @@ describe('SnapFactory', () => {
     });
 
     it('should FAIL to create a snap with 0 mint fee', async () => {
-      await expect(SnapFactoryContract.createSnap(
-        'Test Snap',
-        'NFTSNAP',
-        contractInformation,
-        'ipfs://QmXxZWr5AQf25yu1UswNm2cfGbaUbR5U3ejH1WfFEP8f1e',
-        'ipfs://QmRZ86jmHScFm94hoED2FmB6SjqpuACgy6VYN5nTibxwSB',
-        toWei('0.00000001'),
-        wallet0.address,
-        wallet1.address,
-        0,
-      )).to.be.revertedWith(
-        'SnapFactory:Mint-fee-too-low',
-      );
+      await expect(
+        SnapFactoryContract.createSnap(
+          'Test Snap',
+          'NFTSNAP',
+          contractInformation,
+          'ipfs://QmXxZWr5AQf25yu1UswNm2cfGbaUbR5U3ejH1WfFEP8f1e',
+          'ipfs://QmTkCP5u95yQRr9kM513QNr5pT6DYe3sD3yn8qRi2osTPg',
+          toWei('0.00000001'),
+          wallet0.address,
+          wallet1.address,
+          0,
+        ),
+      ).to.be.revertedWith('SnapFactory:Mint-fee-too-low');
     });
   });
 });

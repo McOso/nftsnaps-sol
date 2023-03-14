@@ -35,7 +35,7 @@ describe('MintableERC721Snap', () => {
       'NFTSNAP',
       contractInformation,
       'ipfs://QmXxZWr5AQf25yu1UswNm2cfGbaUbR5U3ejH1WfFEP8f1e',
-      'ipfs://QmRZ86jmHScFm94hoED2FmB6SjqpuACgy6VYN5nTibxwSB',
+      'ipfs://QmTkCP5u95yQRr9kM513QNr5pT6DYe3sD3yn8qRi2osTPg',
       MINT_FEE,
       wallet0.address,
       wallet1.address,
