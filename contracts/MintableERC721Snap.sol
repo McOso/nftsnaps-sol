@@ -34,7 +34,7 @@ contract MintableERC721Snap is ERC721, Ownable, ReentrancyGuard {
   /// @notice Sale price
   uint256 private salePrice;
 
-  ISnapCore.ContractURI private contractURI;
+  ISnapCore.ContractURI private contractURIData;
 
   /// @notice ID counter for ERC721 tokens
   uint256 private idCounter;
@@ -50,7 +50,7 @@ contract MintableERC721Snap is ERC721, Ownable, ReentrancyGuard {
     address payable _creator_,
     uint256 _salePrice_
   ) ERC721(_name_, _symbol_) {
-    contractURI = _contractURI_;
+    contractURIData = _contractURI_;
     TOKEN_IMAGE_URL = _tokenImageURL_;
     SNAP_IMAGE_URL = _snapImageURL_;
 
@@ -144,7 +144,8 @@ contract MintableERC721Snap is ERC721, Ownable, ReentrancyGuard {
    * @notice Burns a token
    * @param _tokenId uint256 - Token ID to burn
    */
-  function burn(uint256 _tokenId) external onlyOwner {
+  function burn(uint256 _tokenId) external {
+    require(_isApprovedOrOwner(_msgSender(), _tokenId), "NFTSnap:unauthorized-burn");
     _burn(_tokenId);
     --idCounter;
   }
@@ -192,11 +193,11 @@ contract MintableERC721Snap is ERC721, Ownable, ReentrancyGuard {
               string.concat(
                 '{"name":',
                 '"',
-                string.concat(contractURI.name, " ", Strings.toString(_tokenId)),
+                string.concat(contractURIData.name, " ", Strings.toString(_tokenId)),
                 '",',
                 '"description":',
                 '"',
-                contractURI.description,
+                contractURIData.description,
                 '",',
                 '"image":',
                 '"',
@@ -248,27 +249,27 @@ contract MintableERC721Snap is ERC721, Ownable, ReentrancyGuard {
               string.concat(
                 '{"name":',
                 '"',
-                contractURI.name,
+                contractURIData.name,
                 '",',
                 '"description":',
                 '"',
-                contractURI.description,
+                contractURIData.description,
                 '",',
                 '"image":',
                 '"',
-                contractURI.image,
+                contractURIData.image,
                 '",',
                 '"externalLink":',
                 '"',
-                contractURI.externalLink,
+                contractURIData.externalLink,
                 '",',
                 '"sellerFeeBasisPoints":',
                 '"',
-                contractURI.sellerFeeBasisPoints,
+                contractURIData.sellerFeeBasisPoints,
                 '",',
                 '"feeRecipient":',
                 '"',
-                contractURI.feeRecipient,
+                contractURIData.feeRecipient,
                 '"',
                 "}"
               )
@@ -301,11 +302,11 @@ contract MintableERC721Snap is ERC721, Ownable, ReentrancyGuard {
                 'https://nftsnaps.xyz/",',
                 '"sellerFeeBasisPoints":',
                 '"',
-                contractURI.sellerFeeBasisPoints,
+                contractURIData.sellerFeeBasisPoints,
                 '",',
                 '"feeRecipient":',
                 '"',
-                contractURI.feeRecipient,
+                contractURIData.feeRecipient,
                 '"',
                 "}"
               )
