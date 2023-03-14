@@ -86,7 +86,10 @@ contract SnapFactory is ISnapFactory {
 
     uint256 index_ = 0;
     for (uint256 i = 0; i < snapsList.length; i++) {
-      if (MintableERC721Snap(snapsList[i]).owner() == _creator && MintableERC721Snap(snapsList[i]).isMintActive()) {
+      if (
+        MintableERC721Snap(snapsList[i]).owner() == _creator &&
+        MintableERC721Snap(snapsList[i]).isMintActive()
+      ) {
         tempSnaps_[index_++] = snapsList[i];
       }
     }
@@ -103,7 +106,10 @@ contract SnapFactory is ISnapFactory {
 
     uint256 index_ = 0;
     for (uint256 i = 0; i < snapsList.length; i++) {
-      if (MintableERC721Snap(snapsList[i]).owner() == _creator && MintableERC721Snap(snapsList[i]).isVisible()) {
+      if (
+        MintableERC721Snap(snapsList[i]).owner() == _creator &&
+        MintableERC721Snap(snapsList[i]).isVisible()
+      ) {
         tempSnaps_[index_++] = snapsList[i];
       }
     }
