@@ -22,4 +22,8 @@ interface ISnapFactory {
     address payable _creator,
     uint256 _salePrice
   ) external returns (address snapAddress);
+
+  function getActiveSnaps() external view returns (address[] memory snaps);
+
+  function getVisibleSnaps() external view returns (address[] memory snaps);
 }
