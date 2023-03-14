@@ -3,21 +3,13 @@ pragma solidity 0.8.15;
 
 import { Base64 } from "./utils/Base64.sol";
 import { Strings } from "@openzeppelin/contracts/utils/Strings.sol";
+import { ISnapCore } from "./interfaces/ISnapCore.sol";
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 
 contract MintableERC721Snap is ERC721, Ownable, ReentrancyGuard {
-  struct ContractURI {
-    string name;
-    string description;
-    string image;
-    string externalLink;
-    string sellerFeeBasisPoints;
-    string feeRecipient;
-  }
-
   uint256 public constant MINT_LENGTH = 1 days;
 
   uint256 public constant VISIBLE_LENGTH = 2 days;
@@ -42,7 +34,7 @@ contract MintableERC721Snap is ERC721, Ownable, ReentrancyGuard {
   /// @notice Sale price
   uint256 private salePrice;
 
-  ContractURI private contractURI;
+  ISnapCore.ContractURI private contractURI;
 
   /// @notice ID counter for ERC721 tokens
   uint256 private idCounter;
@@ -50,7 +42,7 @@ contract MintableERC721Snap is ERC721, Ownable, ReentrancyGuard {
   constructor(
     string memory _name_,
     string memory _symbol_,
-    ContractURI memory _contractURI_,
+    ISnapCore.ContractURI memory _contractURI_,
     string memory _tokenImageURL_,
     string memory _snapImageURL_,
     uint256 _mintFee_,
