@@ -85,43 +85,11 @@ contract MintableERC721Snap is ERC721, Ownable, ReentrancyGuard {
   /* ===================================================================================== */
 
   function constructContractURI() external view virtual returns (string memory uri) {
-    return
-      string(
-        abi.encodePacked(
-          "data:application/json;base64,",
-          Base64.encode(
-            bytes(
-              string.concat(
-                '{"name":',
-                '"',
-                contractURI.name,
-                '",',
-                '"description":',
-                '"',
-                contractURI.description,
-                '",',
-                '"image":',
-                '"',
-                contractURI.image,
-                '",',
-                '"externalLink":',
-                '"',
-                contractURI.externalLink,
-                '",',
-                '"sellerFeeBasisPoints":',
-                '"',
-                contractURI.sellerFeeBasisPoints,
-                '",',
-                '"feeRecipient":',
-                '"',
-                contractURI.feeRecipient,
-                '"',
-                "}"
-              )
-            )
-          )
-        )
-      );
+    if (block.timestamp < VISIBLE_ENDS) {
+      return _constructContractMeta();
+    } else {
+      return _constructSnapContractMeta();
+    }
   }
 
   function totalSupply() external view returns (uint256) {
@@ -130,9 +98,9 @@ contract MintableERC721Snap is ERC721, Ownable, ReentrancyGuard {
 
   function tokenURI(uint256 _tokenId) public view virtual override returns (string memory) {
     if (block.timestamp < VISIBLE_ENDS) {
-      return _constructTokenURI(_tokenId);
+      return _constructTokenMeta(_tokenId);
     } else {
-      return _constructSNAPURI(_tokenId);
+      return _constructSNAPTokenMeta(_tokenId);
     }
   }
 
@@ -190,7 +158,7 @@ contract MintableERC721Snap is ERC721, Ownable, ReentrancyGuard {
     require(_success, "NFTSnap:mint-fee-release-failed");
   }
 
-  function _constructTokenURI(uint256 _tokenId) internal view returns (string memory) {
+  function _constructTokenMeta(uint256 _tokenId) internal view returns (string memory) {
     return
       string(
         abi.encodePacked(
@@ -218,7 +186,7 @@ contract MintableERC721Snap is ERC721, Ownable, ReentrancyGuard {
       );
   }
 
-  function _constructSNAPURI(uint256 _tokenId) internal view returns (string memory) {
+  function _constructSNAPTokenMeta(uint256 _tokenId) internal view returns (string memory) {
     return
       string(
         abi.encodePacked(
@@ -237,6 +205,83 @@ contract MintableERC721Snap is ERC721, Ownable, ReentrancyGuard {
                 '"image":',
                 '"',
                 SNAP_IMAGE_URL,
+                '"',
+                "}"
+              )
+            )
+          )
+        )
+      );
+  }
+
+  function _constructContractMeta() internal view returns (string memory) {
+    return
+      string(
+        abi.encodePacked(
+          "data:application/json;base64,",
+          Base64.encode(
+            bytes(
+              string.concat(
+                '{"name":',
+                '"',
+                contractURI.name,
+                '",',
+                '"description":',
+                '"',
+                contractURI.description,
+                '",',
+                '"image":',
+                '"',
+                contractURI.image,
+                '",',
+                '"externalLink":',
+                '"',
+                contractURI.externalLink,
+                '",',
+                '"sellerFeeBasisPoints":',
+                '"',
+                contractURI.sellerFeeBasisPoints,
+                '",',
+                '"feeRecipient":',
+                '"',
+                contractURI.feeRecipient,
+                '"',
+                "}"
+              )
+            )
+          )
+        )
+      );
+  }
+
+  function _constructSnapContractMeta() internal view returns (string memory) {
+    return
+      string(
+        abi.encodePacked(
+          "data:application/json;base64,",
+          Base64.encode(
+            bytes(
+              string.concat(
+                '{"name":',
+                '"',
+                'Expired NFT Snap",',
+                '"description":',
+                '"',
+                '???",',
+                '"image":',
+                '"',
+                SNAP_IMAGE_URL,
+                '",',
+                '"externalLink":',
+                '"',
+                'https://nftsnaps.xyz/",',
+                '"sellerFeeBasisPoints":',
+                '"',
+                contractURI.sellerFeeBasisPoints,
+                '",',
+                '"feeRecipient":',
+                '"',
+                contractURI.feeRecipient,
                 '"',
                 "}"
               )
