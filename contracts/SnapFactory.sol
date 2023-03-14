@@ -29,7 +29,7 @@ contract SnapFactory is ISnapFactory {
       _salePrice
     );
 
-    emit SnapMade(address(snap_), _creator);
+    emit SnapMade(address(snap_), _creator, snap_.MINT_ENDS(), snap_.VISIBLE_ENDS());
 
     return address(snap_);
   }

@@ -4,7 +4,7 @@ pragma solidity 0.8.15;
 import { ISnapCore } from "./ISnapCore.sol";
 
 interface ISnapFactory {
-  event SnapMade(address indexed _snapAddress, address _creator);
+  event SnapMade(address indexed _snapAddress, address _creator, uint256 _mintEndsTimestamp, uint256 _visibleEndsTimestamp);
 
   function createSnap(
     string memory _name,

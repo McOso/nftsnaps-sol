@@ -85,7 +85,7 @@ contract MintableERC721Snap is ERC721, Ownable, ReentrancyGuard {
   /* ===================================================================================== */
 
   function constructContractURI() external view virtual returns (string memory uri) {
-    if (block.timestamp < VISIBLE_ENDS) {
+    if (_isVisible()) {
       return _constructContractMeta();
     } else {
       return _constructSnapContractMeta();
@@ -97,11 +97,27 @@ contract MintableERC721Snap is ERC721, Ownable, ReentrancyGuard {
   }
 
   function tokenURI(uint256 _tokenId) public view virtual override returns (string memory) {
-    if (block.timestamp < VISIBLE_ENDS) {
+    if (_isVisible()) {
       return _constructTokenMeta(_tokenId);
     } else {
       return _constructSNAPTokenMeta(_tokenId);
     }
+  }
+
+  function isMintActive() external view returns (bool active) {
+    return _isMintActive();
+  }
+
+  function isVisible() external view returns (bool visible) {
+    return _isVisible();
+  }
+
+  function getSalePrice() external view returns (uint256 price) {
+    return salePrice;
+  }
+
+  function getMintFee() external view returns (uint256 fee) {
+    return MINT_FEE;
   }
 
   // ========================
@@ -113,7 +129,7 @@ contract MintableERC721Snap is ERC721, Ownable, ReentrancyGuard {
    * @param _to address - Address to mint to`
    */
   function mint(address _to) external payable nonReentrant returns (uint256) {
-    require(block.timestamp < MINT_ENDS, "NFTSnap:minting-ended");
+    require(_isMintActive(), "NFTSnap:minting-ended");
     require(msg.value >= (salePrice + MINT_FEE), "NFTSnap:insufficient-amount");
 
     uint256 nextId_ = ++idCounter;
@@ -156,6 +172,14 @@ contract MintableERC721Snap is ERC721, Ownable, ReentrancyGuard {
   function _payoutMintFee() internal {
     (bool _success, ) = MINT_FEE_RECIPIENT.call{ value: MINT_FEE }("");
     require(_success, "NFTSnap:mint-fee-release-failed");
+  }
+
+  function _isMintActive() internal view returns (bool) {
+    return block.timestamp < MINT_ENDS;
+  }
+
+  function _isVisible() internal view returns (bool) {
+    return block.timestamp < VISIBLE_ENDS;
   }
 
   function _constructTokenMeta(uint256 _tokenId) internal view returns (string memory) {
