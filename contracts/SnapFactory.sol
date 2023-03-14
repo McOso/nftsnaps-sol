@@ -81,6 +81,40 @@ contract SnapFactory is ISnapFactory {
     }
   }
 
+  function getActiveByCreator(address _creator) external view returns (address[] memory snaps) {
+    address[] memory tempSnaps_ = new address[](snapsList.length);
+
+    uint256 index_ = 0;
+    for (uint256 i = 0; i < snapsList.length; i++) {
+      if (MintableERC721Snap(snapsList[i]).owner() == _creator && MintableERC721Snap(snapsList[i]).isMintActive()) {
+        tempSnaps_[index_++] = snapsList[i];
+      }
+    }
+
+    snaps = new address[](index_);
+
+    for (uint16 j = 0; j < index_; j++) {
+      snaps[j] = tempSnaps_[j];
+    }
+  }
+
+  function getVisibleByCreator(address _creator) external view returns (address[] memory snaps) {
+    address[] memory tempSnaps_ = new address[](snapsList.length);
+
+    uint256 index_ = 0;
+    for (uint256 i = 0; i < snapsList.length; i++) {
+      if (MintableERC721Snap(snapsList[i]).owner() == _creator && MintableERC721Snap(snapsList[i]).isVisible()) {
+        tempSnaps_[index_++] = snapsList[i];
+      }
+    }
+
+    snaps = new address[](index_);
+
+    for (uint16 j = 0; j < index_; j++) {
+      snaps[j] = tempSnaps_[j];
+    }
+  }
+
   function isActive(address _snap) external view returns (bool active) {
     return snapsMap[_snap] && MintableERC721Snap(_snap).isMintActive();
   }

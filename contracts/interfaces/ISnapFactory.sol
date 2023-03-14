@@ -27,6 +27,10 @@ interface ISnapFactory {
 
   function getVisibleSnaps() external view returns (address[] memory snaps);
 
+  function getActiveByCreator(address _creator) external view returns (address[] memory snaps);
+
+  function getVisibleByCreator(address _creator) external view returns (address[] memory snaps);
+
   function isActive(address _snap) external view returns (bool active);
 
   function isVisible(address _snap) external view returns (bool visible);

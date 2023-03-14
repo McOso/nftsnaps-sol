@@ -109,4 +109,76 @@ describe('SnapFactory', () => {
       ).to.be.revertedWith('SnapFactory:Mint-fee-too-low');
     });
   });
+
+  describe('getActiveByCreator()', () => {
+    it('should SUCCEED to get active snaps by creator', async () => {
+      const result = await SnapFactoryContract.createSnap(
+        'Test Snap',
+        'NFTSNAP',
+        contractInformation,
+        'ipfs://QmXxZWr5AQf25yu1UswNm2cfGbaUbR5U3ejH1WfFEP8f1e',
+        'ipfs://QmTkCP5u95yQRr9kM513QNr5pT6DYe3sD3yn8qRi2osTPg',
+        MINT_FEE,
+        wallet0.address,
+        wallet1.address,
+        0,
+      );
+      const snaps = await SnapFactoryContract.getActiveByCreator(wallet1.address);
+      expect(snaps.length).to.equal(1);
+      expect(await SnapFactoryContract.isActive(snaps[0])).to.be.true;
+      expect(await SnapFactoryContract.isVisible(snaps[0])).to.be.true;
+    });
+
+    it('should return 0 snaps', async () => {
+      const result = await SnapFactoryContract.createSnap(
+        'Test Snap',
+        'NFTSNAP',
+        contractInformation,
+        'ipfs://QmXxZWr5AQf25yu1UswNm2cfGbaUbR5U3ejH1WfFEP8f1e',
+        'ipfs://QmTkCP5u95yQRr9kM513QNr5pT6DYe3sD3yn8qRi2osTPg',
+        MINT_FEE,
+        wallet0.address,
+        wallet1.address,
+        0,
+      );
+      const snaps = await SnapFactoryContract.getActiveByCreator(wallet0.address);
+      expect(snaps.length).to.equal(0);
+    });
+  });
+
+  describe('getVisibleByCreator()', () => {
+    it('should SUCCEED to get active snaps by creator', async () => {
+      const result = await SnapFactoryContract.createSnap(
+        'Test Snap',
+        'NFTSNAP',
+        contractInformation,
+        'ipfs://QmXxZWr5AQf25yu1UswNm2cfGbaUbR5U3ejH1WfFEP8f1e',
+        'ipfs://QmTkCP5u95yQRr9kM513QNr5pT6DYe3sD3yn8qRi2osTPg',
+        MINT_FEE,
+        wallet0.address,
+        wallet1.address,
+        0,
+      );
+      const snaps = await SnapFactoryContract.getVisibleByCreator(wallet1.address);
+      expect(snaps.length).to.equal(1);
+      expect(await SnapFactoryContract.isActive(snaps[0])).to.be.true;
+      expect(await SnapFactoryContract.isVisible(snaps[0])).to.be.true;
+    });
+
+    it('should return 0 snaps', async () => {
+      const result = await SnapFactoryContract.createSnap(
+        'Test Snap',
+        'NFTSNAP',
+        contractInformation,
+        'ipfs://QmXxZWr5AQf25yu1UswNm2cfGbaUbR5U3ejH1WfFEP8f1e',
+        'ipfs://QmTkCP5u95yQRr9kM513QNr5pT6DYe3sD3yn8qRi2osTPg',
+        MINT_FEE,
+        wallet0.address,
+        wallet1.address,
+        0,
+      );
+      const snaps = await SnapFactoryContract.getVisibleByCreator(wallet0.address);
+      expect(snaps.length).to.equal(0);
+    });
+  });
 });
