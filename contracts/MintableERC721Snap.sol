@@ -22,6 +22,10 @@ contract MintableERC721Snap is ERC721, Ownable, ReentrancyGuard {
 
   string private SNAP_IMAGE_URL;
 
+  string private NAME;
+
+  string private SYMBOL;
+
   /// @notice Mint Fee
   uint256 private immutable MINT_FEE;
 
@@ -50,6 +54,9 @@ contract MintableERC721Snap is ERC721, Ownable, ReentrancyGuard {
     address payable _creator_,
     uint256 _salePrice_
   ) ERC721(_name_, _symbol_) {
+    NAME = _name_;
+    SYMBOL = _symbol_;
+
     contractURIData = _contractURI_;
     TOKEN_IMAGE_URL = _tokenImageURL_;
     SNAP_IMAGE_URL = _snapImageURL_;
@@ -84,7 +91,7 @@ contract MintableERC721Snap is ERC721, Ownable, ReentrancyGuard {
   /* External Functions                                                                    */
   /* ===================================================================================== */
 
-  function contractURI() external view virtual returns (string memory uri) {
+  function contractURI() external view returns (string memory uri) {
     if (_isVisible()) {
       return _constructContractMeta();
     } else {
@@ -96,11 +103,27 @@ contract MintableERC721Snap is ERC721, Ownable, ReentrancyGuard {
     return idCounter;
   }
 
-  function tokenURI(uint256 _tokenId) public view virtual override returns (string memory) {
+  function tokenURI(uint256 _tokenId) public view override returns (string memory) {
     if (_isVisible()) {
       return _constructTokenMeta(_tokenId);
     } else {
       return _constructSNAPTokenMeta(_tokenId);
+    }
+  }
+
+  function name() public view override returns (string memory) {
+    if (_isVisible()) {
+      return NAME;
+    } else {
+      return "Expired NFT Snap";
+    }
+  }
+
+  function symbol() public view override returns (string memory) {
+    if (_isVisible()) {
+      return SYMBOL;
+    } else {
+      return "NFTSNAP";
     }
   }
 
