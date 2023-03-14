@@ -30,23 +30,33 @@ describe('MintableERC721Snap', () => {
   });
 
   beforeEach(async () => {
-    MintableERC721Snap = await MintableERC721Factory.deploy('Test Snap', 'NFTSNAP', contractInformation,'ipfs://QmXxZWr5AQf25yu1UswNm2cfGbaUbR5U3ejH1WfFEP8f1e', 'ipfs://QmRZ86jmHScFm94hoED2FmB6SjqpuACgy6VYN5nTibxwSB', MINT_FEE, wallet0.address, wallet1.address, 0);
+    MintableERC721Snap = await MintableERC721Factory.deploy(
+      'Test Snap',
+      'NFTSNAP',
+      contractInformation,
+      'ipfs://QmXxZWr5AQf25yu1UswNm2cfGbaUbR5U3ejH1WfFEP8f1e',
+      'ipfs://QmRZ86jmHScFm94hoED2FmB6SjqpuACgy6VYN5nTibxwSB',
+      MINT_FEE,
+      wallet0.address,
+      wallet1.address,
+      0,
+    );
   });
 
   describe('mint(address to)', () => {
     it('should SUCCEED to mint NFT #1', async () => {
-      await MintableERC721Snap.mint(wallet0.address, {value: MINT_FEE});
+      await MintableERC721Snap.mint(wallet0.address, { value: MINT_FEE });
       expect(await MintableERC721Snap.ownerOf(1)).to.be.equal(wallet0.address);
     });
     it('should FAIL to mint NFT #1 - no funds', async () => {
-      await expect(
-        MintableERC721Snap.mint(wallet0.address)
-      ).to.be.revertedWith("NFTSnap:insufficient-amount");
+      await expect(MintableERC721Snap.mint(wallet0.address)).to.be.revertedWith(
+        'NFTSnap:insufficient-amount',
+      );
     });
     it('should FAIL to mint NFT #1 - not enough funds', async () => {
       await expect(
-        MintableERC721Snap.mint(wallet0.address, {value: toWei('0.0000091')})
-      ).to.be.revertedWith("NFTSnap:insufficient-amount");
+        MintableERC721Snap.mint(wallet0.address, { value: toWei('0.0000091') }),
+      ).to.be.revertedWith('NFTSnap:insufficient-amount');
     });
   });
 });

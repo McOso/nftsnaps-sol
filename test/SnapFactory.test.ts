@@ -52,20 +52,39 @@ describe('SnapFactory', () => {
 
   describe('createSnap()', () => {
     it('should SUCCEED to create a snap', async () => {
-      const result = await SnapFactoryContract.createSnap('Test Snap', 'NFTSNAP', contractInformation,'ipfs://QmXxZWr5AQf25yu1UswNm2cfGbaUbR5U3ejH1WfFEP8f1e', 'ipfs://QmRZ86jmHScFm94hoED2FmB6SjqpuACgy6VYN5nTibxwSB', MINT_FEE, wallet0.address, wallet1.address, 0);
+      const result = await SnapFactoryContract.createSnap(
+        'Test Snap',
+        'NFTSNAP',
+        contractInformation,
+        'ipfs://QmXxZWr5AQf25yu1UswNm2cfGbaUbR5U3ejH1WfFEP8f1e',
+        'ipfs://QmRZ86jmHScFm94hoED2FmB6SjqpuACgy6VYN5nTibxwSB',
+        MINT_FEE,
+        wallet0.address,
+        wallet1.address,
+        0,
+      );
       expect(result.hash).to.not.be.undefined;
       expect(result.confirmations).to.be.greaterThan(0);
       await expect(result).to.emit(SnapFactoryContract, 'SnapMade');
-      expect( (await SnapFactoryContract.getActiveSnaps()).length ).to.equal(1);
+      expect((await SnapFactoryContract.getActiveSnaps()).length).to.equal(1);
     });
 
     it('should SUCCEED to create a snap with creator fee', async () => {
-      const result = await SnapFactoryContract.createSnap('Test Snap', 'NFTSNAP', contractInformation,'ipfs://QmXxZWr5AQf25yu1UswNm2cfGbaUbR5U3ejH1WfFEP8f1e', 'ipfs://QmRZ86jmHScFm94hoED2FmB6SjqpuACgy6VYN5nTibxwSB', MINT_FEE, wallet0.address, wallet1.address, toWei('0.045'));
+      const result = await SnapFactoryContract.createSnap(
+        'Test Snap',
+        'NFTSNAP',
+        contractInformation,
+        'ipfs://QmXxZWr5AQf25yu1UswNm2cfGbaUbR5U3ejH1WfFEP8f1e',
+        'ipfs://QmRZ86jmHScFm94hoED2FmB6SjqpuACgy6VYN5nTibxwSB',
+        MINT_FEE,
+        wallet0.address,
+        wallet1.address,
+        toWei('0.045'),
+      );
       expect(result.hash).to.not.be.undefined;
       expect(result.confirmations).to.be.greaterThan(0);
       await expect(result).to.emit(SnapFactoryContract, 'SnapMade');
-      expect( (await SnapFactoryContract.getActiveSnaps()).length ).to.equal(1);
+      expect((await SnapFactoryContract.getActiveSnaps()).length).to.equal(1);
     });
-
   });
 });
