@@ -145,18 +145,19 @@ contract MintableERC721Snap is ERC721, Ownable, ReentrancyGuard {
 
   function get() external view returns (ISnapCore.SnapDetails memory snapDetails) {
     if (_isVisible()) {
-      return ISnapCore.SnapDetails(
-        contractURIData.name, 
-        contractURIData.description, 
-        contractURIData.image, 
-        contractURIData.externalLink, 
-        contractURIData.sellerFeeBasisPoints, 
-        contractURIData.feeRecipient, 
-        CREATOR_ADDRESS, 
-        salePrice, 
-        MINT_ENDS, 
-        VISIBLE_ENDS
-      );
+      return
+        ISnapCore.SnapDetails(
+          contractURIData.name,
+          contractURIData.description,
+          contractURIData.image,
+          contractURIData.externalLink,
+          contractURIData.sellerFeeBasisPoints,
+          contractURIData.feeRecipient,
+          CREATOR_ADDRESS,
+          salePrice,
+          MINT_ENDS,
+          VISIBLE_ENDS
+        );
     }
   }
 

@@ -2,7 +2,7 @@ import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import { expect } from 'chai';
 import { Contract, ContractFactory } from 'ethers';
 import { ethers } from 'hardhat';
-import { time } from "@nomicfoundation/hardhat-network-helpers";
+import { time } from '@nomicfoundation/hardhat-network-helpers';
 
 const { getSigners, utils } = ethers;
 const { parseEther: toWei } = utils;
@@ -93,9 +93,7 @@ describe('MintableERC721Snap', () => {
       expect(await MintableERC721Snap.ownerOf(1)).to.be.equal(wallet0.address);
       expect(await MintableERC721Snap.totalSupply()).to.equal(1);
 
-      await expect(
-        MintableERC721Snap.burn(1),
-      ).to.be.revertedWith('NFTSnap:unauthorized-burn');
+      await expect(MintableERC721Snap.burn(1)).to.be.revertedWith('NFTSnap:unauthorized-burn');
       expect(await MintableERC721Snap.totalSupply()).to.equal(1);
     });
     it('should SUCCEED to burn NFT', async () => {
@@ -144,25 +142,25 @@ describe('MintableERC721Snap', () => {
     it('should get correct contract uri', async () => {
       await MintableERC721Snap.mint(wallet0.address, { value: MINT_FEE });
       const result = await MintableERC721Snap.contractURI();
-      console.log(result)
+      console.log(result);
     });
     it('should get correct contract uri - expired', async () => {
       await MintableERC721Snap.mint(wallet0.address, { value: MINT_FEE });
       await time.increase(TWO_DAYS_SECONDS + 1);
       const result = await MintableERC721Snap.contractURI();
-      console.log(result)
+      console.log(result);
     });
 
     it('should get correct token uri', async () => {
       await MintableERC721Snap.mint(wallet0.address, { value: MINT_FEE });
       const result = await MintableERC721Snap.tokenURI(1);
-      console.log(result)
+      console.log(result);
     });
     it('should get correct token uri - expired', async () => {
       await MintableERC721Snap.mint(wallet0.address, { value: MINT_FEE });
       await time.increase(TWO_DAYS_SECONDS + 1);
       const result = await MintableERC721Snap.tokenURI(1);
-      console.log(result)
+      console.log(result);
     });
   });
 });
