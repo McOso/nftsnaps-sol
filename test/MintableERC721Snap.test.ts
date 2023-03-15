@@ -2,6 +2,7 @@ import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import { expect } from 'chai';
 import { Contract, ContractFactory } from 'ethers';
 import { ethers } from 'hardhat';
+import { time } from "@nomicfoundation/hardhat-network-helpers";
 
 const { getSigners, utils } = ethers;
 const { parseEther: toWei } = utils;
@@ -16,6 +17,9 @@ const contractInformation = {
 };
 
 const MINT_FEE = toWei('0.0000092');
+
+const DAY_SECONDS = 86400;
+const TWO_DAYS_SECONDS = 2 * DAY_SECONDS;
 
 describe('MintableERC721Snap', () => {
   let wallet0: SignerWithAddress;
@@ -72,6 +76,93 @@ describe('MintableERC721Snap', () => {
         MintableERC721Snap.mint(wallet0.address, { value: toWei('0.0000091') }),
       ).to.be.revertedWith('NFTSnap:insufficient-amount');
       expect(await MintableERC721Snap.totalSupply()).to.equal(0);
+    });
+
+    it('should FAIL to mint NFT #1 - minting expired', async () => {
+      await time.increase(DAY_SECONDS + 1);
+      await expect(
+        MintableERC721Snap.mint(wallet0.address, { value: MINT_FEE }),
+      ).to.be.revertedWith('NFTSnap:minting-ended');
+      expect(await MintableERC721Snap.totalSupply()).to.equal(0);
+    });
+  });
+
+  describe('burn()', () => {
+    it('should FAIL to burn NFT - still visible', async () => {
+      await MintableERC721Snap.mint(wallet0.address, { value: MINT_FEE });
+      expect(await MintableERC721Snap.ownerOf(1)).to.be.equal(wallet0.address);
+      expect(await MintableERC721Snap.totalSupply()).to.equal(1);
+
+      await expect(
+        MintableERC721Snap.burn(1),
+      ).to.be.revertedWith('NFTSnap:unauthorized-burn');
+      expect(await MintableERC721Snap.totalSupply()).to.equal(1);
+    });
+    it('should SUCCEED to burn NFT', async () => {
+      await MintableERC721Snap.mint(wallet0.address, { value: MINT_FEE });
+      expect(await MintableERC721Snap.ownerOf(1)).to.be.equal(wallet0.address);
+      expect(await MintableERC721Snap.totalSupply()).to.equal(1);
+
+      await time.increase(TWO_DAYS_SECONDS + 1);
+
+      await MintableERC721Snap.burn(1);
+      expect(await MintableERC721Snap.totalSupply()).to.equal(0);
+    });
+
+    it('should SUCCEED to burn NFT permissionlessly', async () => {
+      await MintableERC721Snap.mint(wallet0.address, { value: MINT_FEE });
+      expect(await MintableERC721Snap.ownerOf(1)).to.be.equal(wallet0.address);
+      expect(await MintableERC721Snap.totalSupply()).to.equal(1);
+
+      await time.increase(TWO_DAYS_SECONDS + 1);
+
+      await MintableERC721Snap.connect(wallet1).burn(1);
+      expect(await MintableERC721Snap.totalSupply()).to.equal(0);
+    });
+  });
+
+  describe('metadata', () => {
+    it('should get correct name', async () => {
+      await MintableERC721Snap.mint(wallet0.address, { value: MINT_FEE });
+      expect(await MintableERC721Snap.name()).to.be.equal('Test Snap');
+    });
+    it('should get correct name - expired', async () => {
+      await MintableERC721Snap.mint(wallet0.address, { value: MINT_FEE });
+      await time.increase(TWO_DAYS_SECONDS + 1);
+      expect(await MintableERC721Snap.name()).to.be.equal('Expired NFT Snap');
+    });
+    it('should get correct symbol', async () => {
+      await MintableERC721Snap.mint(wallet0.address, { value: MINT_FEE });
+      expect(await MintableERC721Snap.symbol()).to.be.equal('NFTSNAP');
+    });
+    it('should get correct symbol - expired', async () => {
+      await MintableERC721Snap.mint(wallet0.address, { value: MINT_FEE });
+      await time.increase(TWO_DAYS_SECONDS + 1);
+      expect(await MintableERC721Snap.symbol()).to.be.equal('NFTSNAP');
+    });
+
+    it('should get correct contract uri', async () => {
+      await MintableERC721Snap.mint(wallet0.address, { value: MINT_FEE });
+      const result = await MintableERC721Snap.contractURI();
+      console.log(result)
+    });
+    it('should get correct contract uri - expired', async () => {
+      await MintableERC721Snap.mint(wallet0.address, { value: MINT_FEE });
+      await time.increase(TWO_DAYS_SECONDS + 1);
+      const result = await MintableERC721Snap.contractURI();
+      console.log(result)
+    });
+
+    it('should get correct token uri', async () => {
+      await MintableERC721Snap.mint(wallet0.address, { value: MINT_FEE });
+      const result = await MintableERC721Snap.tokenURI(1);
+      console.log(result)
+    });
+    it('should get correct token uri - expired', async () => {
+      await MintableERC721Snap.mint(wallet0.address, { value: MINT_FEE });
+      await time.increase(TWO_DAYS_SECONDS + 1);
+      const result = await MintableERC721Snap.tokenURI(1);
+      console.log(result)
     });
   });
 });

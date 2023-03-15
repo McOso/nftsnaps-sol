@@ -10,4 +10,17 @@ interface ISnapCore {
     string sellerFeeBasisPoints;
     string feeRecipient;
   }
+
+  struct SnapDetails {
+    string name;
+    string description;
+    string image;
+    string externalLink;
+    string sellerFeeBasisPoints;
+    string feeRecipient;
+    address creator;
+    uint256 salePrice;
+    uint256 mintEndTime;
+    uint256 visibleEndTime;
+  }
 }

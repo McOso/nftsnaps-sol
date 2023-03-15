@@ -15,6 +15,8 @@ export default async function deploy(hardhat: HardhatRuntimeEnvironment) {
     log: true,
   });
 
+  /*
+
   // EXAMPLE DEPLOYING A SNAP
   const snapFactoryContract = await ethers.getContractAt("SnapFactory", SnapFactory.address);
 
@@ -43,4 +45,22 @@ export default async function deploy(hardhat: HardhatRuntimeEnvironment) {
   const receiptSnap = await txSnap.wait();
 
   console.log("test snap contract address: ", receiptSnap.events[2].args[0]);
+
+  // ANOTHER ONE
+  const txSnap1 = await snapFactoryContract.createSnap(
+    "A Day in the Life",
+    "MCLIFE",
+    contractInformation,
+    "ipfs://QmXxZWr5AQf25yu1UswNm2cfGbaUbR5U3ejH1WfFEP8f1e",
+    "ipfs://QmTkCP5u95yQRr9kM513QNr5pT6DYe3sD3yn8qRi2osTPg",
+    MINT_FEE,
+    deployer,
+    "0xd095E0f8C72E22319846b643c4bac0caC1f67006",
+    utils.parseEther("0.045")
+  );
+  const receiptSnap1 = await txSnap.wait();
+
+  console.log("test snap1 contract address: ", receiptSnap1.events[2].args[0]);
+  
+  */
 }
