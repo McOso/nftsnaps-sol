@@ -52,3 +52,5 @@ It's just a Factory that creates Snaps ❤
 
 ### Share Your Story
 https://www.nftsnaps.xyz/
+
+<sub>Disclaimer: This was a quick hack, use at your own risk</sub>
